@@ -1,0 +1,799 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Triển khai Base Work+ · Five Stars Việt Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#f6f8fb;--panel:#ffffff;--soft:#f0f3f8;--line:#e2e7ef;--ink:#16202f;--muted:#5b6678;--brand:#166dba;--brand-s:#e3f0fc;--on-brand:#ffffff;--ev:#166dba;--ev-s:#e6f1fc;--po:#a25904;--po-s:#fdf1e1;--fd:#475569;--fd-s:#eef1f5;--app:#7c3aed;--app-s:#f2ecfe;--core:#0b7a54;--core-s:#e4f6ee;--danger:#cd1a41;--danger-s:#ffe4e6;--danger-ink:#be123c;--cyan:#077995;--zoom-hint:rgba(15,20,30,.72);--shadow:0 1px 2px rgba(16,24,40,.05),0 6px 20px rgba(16,24,40,.05);--font-sans:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--font-mono:ui-monospace,Menlo,Consolas,monospace;--top:58px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d121c;--panel:#151c2a;--soft:#1b2436;--line:#26314a;--ink:#e7ecf4;--muted:#9aa6ba;--brand:#5aa9f0;--brand-s:#16263d;--on-brand:#0d121c;--ev:#5aa9f0;--ev-s:#152740;--po:#f0a23b;--po-s:#2d2212;--fd:#a3b1c6;--fd-s:#1d2535;--app:#a78bfa;--app-s:#241c3d;--core:#34d399;--core-s:#10291f;--danger:#fb7185;--danger-s:#4c0519;--danger-ink:#fda4af;--cyan:#22d3ee;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d121c;--panel:#151c2a;--soft:#1b2436;--line:#26314a;--ink:#e7ecf4;--muted:#9aa6ba;--brand:#5aa9f0;--brand-s:#16263d;--on-brand:#0d121c;--ev:#5aa9f0;--ev-s:#152740;--po:#f0a23b;--po-s:#2d2212;--fd:#a3b1c6;--fd-s:#1d2535;--app:#a78bfa;--app-s:#241c3d;--core:#34d399;--core-s:#10291f;--danger:#fb7185;--danger-s:#4c0519;--danger-ink:#fda4af;--cyan:#22d3ee;--shadow:none;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+html,body{margin:0;background:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(8px)}
+/* ---------- Base ---------- */
+.hb, .hb * { box-sizing: border-box; }
+.hb { background: var(--bg); color: var(--ink); font: 15px/1.62 var(--font-sans); }
+:where(.hb) a { color: var(--brand); }
+:where(.hb) h1 { font-size: 36px; line-height: 1.2; margin: 10px 0 12px; font-weight: 800; letter-spacing: -0.01em; }
+:where(.hb) h2 { font-size: 25px; margin: 56px 0 12px; padding-top: 10px; display: flex; align-items: center; gap: 12px; font-weight: 800; }
+:where(.hb) h3 { margin: 0; font-size: 21px; }
+:where(.hb) h3 small { font-weight: 500; color: var(--muted); font-size: 14px; margin-left: 6px; }
+.hb .h3 { font-size: 18px; margin: 28px 0 10px; }
+:where(.hb) h4 { margin: 0 0 8px; font-size: 15px; }
+:where(.hb) h5 { margin: 0 0 6px; font-size: 14.5px; color: var(--brand); }
+:where(.hb) code { background: var(--soft); padding: 1px 6px; border-radius: 5px; font-size: 12.5px; font-family: var(--font-mono); }
+:where(.hb) :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* ---------- TopBar ---------- */
+.top { position: sticky; top: 0; z-index: 50; height: var(--top); display: flex; align-items: center; gap: 14px; padding: 0 20px; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; text-decoration: none; }
+.brand img { height: 30px; display: block; }
+.brand .wm { font-weight: 800; font-size: 20px; color: var(--brand); letter-spacing: -0.01em; }
+.tdiv { width: 1px; height: 26px; background: var(--line); }
+.ttl { font-size: 15px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ttl b { color: var(--ink); }
+.tools { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+/* ---------- Buttons ---------- */
+.zoomc { display: flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.zoomc button, .themeb { background: var(--panel); color: var(--ink); border: 0; padding: 6px 11px; font-family: inherit; font-size: 14px; cursor: pointer; }
+.zoomc button + button { border-left: 1px solid var(--line); }
+.zval { min-width: 58px; }
+.themeb { border: 1px solid var(--line); border-radius: 10px; }
+.zoomc button:hover, .themeb:hover { background: var(--soft); }
+.navtoggle { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 10px; width: 36px; height: 34px; font-size: 16px; cursor: pointer; }
+.navtoggle:hover { background: var(--soft); }
+.navtools { display: flex; gap: 6px; margin-bottom: 10px; }
+.navtools button { flex: 1 1 0%; font-family: inherit; padding: 5px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--muted); cursor: pointer; }
+.navtools button:hover { color: var(--ink); background: var(--soft); }
+.domrow { display: flex; gap: 8px; margin: 8px 0 6px; }
+.domrow input { flex: 1 1 0%; min-width: 0; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: 14px var(--font-mono); }
+.domrow button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: inherit; }
+
+/* ---------- SideNav ---------- */
+/* ---------- Hero ---------- */
+.hero { background: linear-gradient(135deg, var(--brand-s), var(--panel) 70%); border: 1px solid var(--line); border-radius: 20px; padding: 30px 32px; margin-bottom: 10px; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brand); }
+.lead { color: var(--muted); max-width: 920px; margin: 0 0 14px; }
+.path { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+.path a { display: block; text-decoration: none; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; font-weight: 700; }
+.path a b { color: var(--brand); margin-right: 6px; }
+.path a span { display: block; font-weight: 500; color: var(--muted); font-size: 13px; }
+.path a:hover { border-color: var(--brand); }
+.hint { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+
+/* ---------- KPI ---------- */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0 8px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.kpi b { font-size: 26px; display: block; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.kpi span { color: var(--muted); font-size: 12.5px; }
+
+/* ---------- SectionHeading ---------- */
+.sn { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--on-brand); font-size: 16px; flex: 0 0 auto; }
+
+/* ---------- Card ---------- */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+.whys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.why-c { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+.why-c .wn { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--brand-s); color: var(--brand); font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+.why-c p { margin: 0; font-size: 13.5px; color: var(--muted); }
+.gow { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 12px; margin: 16px 0; }
+.gow .card { box-shadow: none; }
+.gow .goal { border-top: 3px solid var(--brand); }
+.gow .output { border-top: 3px solid var(--core); }
+.gow .how { border-top: 3px solid var(--po); }
+.gow p, .gow ol { margin: 0; font-size: 14px; }
+.gow ol { padding-left: 18px; }
+
+/* ---------- Chip, Pill, Tag, badges ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-block; font-size: 12.5px; padding: 3px 10px; border-radius: 99px; text-decoration: none; border: 1px solid; font-weight: 600; white-space: nowrap; }
+.chip.ev { background: var(--ev-s); color: var(--ev); border-color: color-mix(in srgb, var(--ev) 35%, transparent); }
+.chip.po { background: var(--po-s); color: var(--po); border-color: color-mix(in srgb, var(--po) 35%, transparent); }
+.chip.ns { background: var(--fd-s); color: var(--fd); border-color: var(--line); }
+.meta { margin: 6px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); text-decoration: none; }
+.pill.ev { background: var(--ev-s); color: var(--ev); }
+.pill.po { background: var(--po-s); color: var(--po); }
+.pill.st { background: var(--soft); color: var(--ink); }
+.pill.st:hover { border-color: var(--brand); }
+.pill.model { font-family: var(--font-mono); font-size: 11.5px; }
+.pill.when { background: var(--core-s); color: var(--core); }
+.tag { font-size: 11.5px; padding: 1px 8px; border-radius: 5px; background: var(--soft); color: var(--muted); white-space: nowrap; }
+.lay { display: inline-block; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 1px 7px; border-radius: 5px; }
+.lay.fd { background: var(--fd-s); color: var(--fd); }
+.lay.ev { background: var(--ev-s); color: var(--ev); }
+.lay.po { background: var(--po-s); color: var(--po); }
+.rq { font-size: 11.5px; padding: 1px 8px; border-radius: 99px; font-weight: 700; }
+.rq.req, .rq.cond { background: var(--danger-s); color: var(--danger-ink); margin-left: 0; }
+.rq.opt { background: var(--soft); color: var(--muted); }
+.ac { display: inline-block; padding: 3px 10px; border-radius: 99px; font-weight: 700; font-size: 12.5px; }
+.ac.full { background: var(--core-s); color: var(--core); }
+.ac.part { background: var(--po-s); color: var(--po); }
+.ac.none { color: var(--line); font-size: 15px; }
+
+/* ---------- Table & Matrix ---------- */
+.tscroll { overflow-x: auto; }
+.extable { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+:where(.hb) table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+:where(.hb) th, :where(.hb) td { border-bottom: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; }
+:where(.hb) thead th { color: var(--muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.matrix { font-size: 13px; }
+.matrix th[scope="row"] { white-space: nowrap; }
+.matrix th[scope="row"] a { color: var(--ink); text-decoration: none; }
+.matrix td { text-align: center; font-size: 15px; }
+.matrix td.on.ev { background: var(--ev-s); color: var(--ev); }
+.matrix td.on.po { background: var(--po-s); color: var(--po); }
+.matrix thead th { text-transform: none; letter-spacing: 0; font-size: 12px; text-align: center; }
+.matrix thead th:first-child { text-align: left; }
+.cmx td.y { color: var(--core); background: var(--core-s); }
+.cmx td.p { color: var(--po); }
+.cmx td.n { color: var(--line); }
+.cmx td.q { color: var(--muted); }
+.cmx .mgrp td { text-align: left; font-size: 11.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); background: var(--soft); }
+
+/* ---------- Legend ---------- */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--muted); margin: 10px 0 14px; }
+.lg { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.lg.hris { background: var(--brand); }
+.lg.mixed { background: var(--brand-s); border: 2px solid var(--brand); }
+.lg.other { border: 2px dashed var(--muted); }
+.lg.ev { background: var(--ev); }
+.lg.po { background: var(--po); }
+.lg.fd { background: var(--fd); }
+.lg.app { border: 2px dashed var(--app); }
+.legend b.y { color: var(--core); }
+.legend b.p { color: var(--po); }
+.legend b.n { color: var(--line); }
+.legend b.q { color: var(--muted); }
+
+/* ---------- JourneyBar ---------- */
+.jbar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; margin: 8px 0 4px; }
+.jstep { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 12px 10px 12px 26px; text-decoration: none; color: var(--on-brand); background: var(--brand); clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%); margin-right: -8px; }
+.jstep:first-child { clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%); padding-left: 14px; }
+.jstep.mixed { background: var(--brand-s); color: var(--brand); }
+.jstep.other { background: var(--soft); color: var(--muted); }
+.jstep .jn { font-size: 11px; font-weight: 700; opacity: 0.85; }
+.jstep .jt { font-weight: 700; font-size: 13.5px; line-height: 1.25; }
+.jstep .ja { font-size: 11px; opacity: 0.9; }
+@media (max-width: 640px) {
+  .jbar { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .jstep, .jstep:first-child { clip-path: none; margin: 0; border-radius: 10px; padding-left: 12px; }
+}
+
+/* ---------- StageCard ---------- */
+.stages { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+.stage { background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--brand); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+.stage.mixed { border-top-color: color-mix(in srgb, var(--brand) 55%, var(--panel)); }
+.stage.other { border-top: 4px dashed var(--muted); opacity: 0.85; }
+.stage header { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.stage .jn { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--brand-s); color: var(--brand); font-weight: 800; flex: 0 0 auto; }
+.stage h4 { margin: 0; font-size: 16px; }
+.stage .app { font-size: 12px; color: var(--muted); }
+.stage .row { border-top: 1px solid var(--line); padding: 7px 0; }
+.stage .rl { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.stage ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
+.snote { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; font-style: italic; }
+
+/* ---------- FlowSteps ---------- */
+.flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 8px; align-items: stretch; margin: 10px 0 16px; }
+.fstep { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; position: relative; box-shadow: var(--shadow); }
+.fstep h4 { margin: 6px 0 4px; }
+.fstep p { margin: 0; font-size: 13.5px; color: var(--muted); }
+.fn { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--soft); font-weight: 800; font-size: 13px; }
+.fstep.svc { border-color: var(--brand); }
+.fstep.svc .fn { background: var(--brand); color: var(--on-brand); }
+.fstep.rec .fn { background: var(--ev-s); color: var(--ev); }
+.fstep.out { border-color: var(--core); }
+.fstep.out .fn { background: var(--core); color: var(--on-brand); }
+.farrow { display: grid; place-items: center; font-size: 22px; color: var(--muted); }
+@media (max-width: 980px) { .flow { grid-template-columns: 1fr; } .farrow { transform: rotate(90deg); } }
+
+/* ---------- Callouts ---------- */
+.note { background: var(--po-s); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 14px; margin-top: 12px; }
+.note ul { margin: 0; padding-left: 18px; }
+.ex { background: var(--soft); border-left: 3px solid var(--core); padding: 8px 10px; border-radius: 6px; font-size: 13.5px; }
+.keep { margin: 10px 0 0; font-size: 13px; color: var(--core); background: var(--core-s); padding: 8px 12px; border-radius: 8px; }
+.goto { margin-top: 8px; font-size: 13px; color: var(--muted); background: var(--brand-s); border-radius: 8px; padding: 7px 10px; }
+.goto .golink { margin: 0 2px; }
+.fwbox { background: var(--brand-s); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; margin: 10px 0 12px; }
+.fwbox h4 small { font-weight: 500; color: var(--muted); margin-left: 6px; }
+.fwbox ol { margin: 0; padding-left: 20px; font-size: 14px; }
+
+/* ---------- GoLink ---------- */
+.golinks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 2px; }
+.gl-l { font-size: 12px; color: var(--muted); font-weight: 600; margin-right: 2px; }
+.golink { display: inline-block; font-size: 12.5px; padding: 2px 9px; border-radius: 7px; border: 1px solid var(--line); background: var(--panel); color: var(--brand); text-decoration: none; white-space: nowrap; }
+.golink:hover { border-color: var(--brand); background: var(--brand-s); }
+.golink.main { background: var(--brand); color: var(--on-brand); border-color: var(--brand); font-weight: 600; }
+.golink.main:hover { filter: brightness(1.08); }
+
+/* ---------- ServiceCard ---------- */
+.svc { background: var(--panel); border: 1px solid var(--line); border-left: 5px solid var(--ev); border-radius: 16px; padding: 22px 22px 18px; margin: 20px 0; box-shadow: var(--shadow); }
+.svc.po { border-left-color: var(--po); }
+.svc-top { display: flex; gap: 14px; align-items: center; }
+.ico { font-size: 30px; line-height: 1; }
+.svc-tt { flex: 1 1 0%; min-width: 0; }
+.svc-tt h3 { margin: 0; font-size: 24px; }
+.svc-tt small { color: var(--muted); font-size: 13px; }
+.svc-cta .golink.main { font-size: 13.5px; padding: 6px 14px; }
+.svc-use { margin: 10px 0 14px; font-size: 15.5px; color: var(--ink); }
+.spec { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--soft); }
+.spec .sp { padding: 10px 14px; border-right: 1px solid var(--line); min-width: 0; }
+.spec .sp:last-child { border-right: 0; }
+.spec .sp > span { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.spec .sp b { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; font-size: 14px; font-weight: 600; word-break: break-word; }
+.spec .sp b.ev { color: var(--ev); }
+.spec .sp b.po { color: var(--po); }
+.spec .sp b .tag { font-size: 12px; }
+.spec .sp b a.tag.lk { color: var(--brand); font-weight: 600; text-decoration: none; }
+.iox { display: grid; grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr); align-items: stretch; margin: 12px 0 18px; }
+.io-b { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; background: var(--panel); }
+.io-b.in { border-left: 4px solid var(--fd); }
+.io-b.out { border-left: 4px solid var(--core); }
+.io-b span { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.io-b.out span { color: var(--core); }
+.io-b p { margin: 4px 0 0; font-size: 13.5px; }
+.io-ar { display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--muted); }
+@media (max-width: 900px) {
+  .spec { grid-template-columns: 1fr 1fr; }
+  .spec .sp:nth-child(2) { border-right: 0; }
+  .spec .sp:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .iox { grid-template-columns: 1fr; }
+  .io-ar { transform: rotate(90deg); height: 26px; }
+  .svc-top { flex-wrap: wrap; }
+  .svc-cta { flex-basis: 100%; }
+  .svc-tt h3 { font-size: 21px; }
+}
+
+/* ---------- Tabs ---------- */
+.stabs { display: flex; gap: 4px; border-bottom: 2px solid var(--line); margin: 0 0 16px; overflow-x: auto; }
+.stab { border: 0; border-bottom: 3px solid transparent; background: none; font: 600 14px var(--font-sans); color: var(--muted); padding: 9px 14px; margin-bottom: -2px; cursor: pointer; white-space: nowrap; }
+.stab:hover { color: var(--ink); }
+.stab.on { color: var(--brand); border-bottom-color: var(--brand); }
+.svc.po .stab.on { color: var(--po); border-bottom-color: var(--po); }
+
+/* ---------- KindCard ---------- */
+.kinds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+.kind { background: var(--panel); border: 1px solid var(--line); border-left: 5px solid; border-radius: 12px; padding: 12px 14px; }
+.kind.ev { border-left-color: var(--ev); }
+.kind.po { border-left-color: var(--po); }
+.kind.nsk { border-left-color: var(--fd); }
+.kind small { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.kind p { margin: 0; font-size: 13.5px; }
+.gcards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0 14px; }
+.gcard { border-radius: 14px; padding: 14px 18px; border: 1px solid var(--line); border-top: 5px solid; }
+.gcard.ev { background: var(--ev-s); border-top-color: var(--ev); }
+.gcard.po { background: var(--po-s); border-top-color: var(--po); }
+.gcard h4 { font-size: 17px; }
+.gcard small { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.gcard p { margin: 4px 0; font-size: 14px; }
+.lex { font-size: 12.5px; color: var(--muted); font-style: italic; }
+
+/* ---------- Frame (Goal / Impact / How) ---------- */
+.frame { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 10px 0; }
+.fr { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--panel); }
+.fr h5 { margin: 0 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fr p, .fr ul, .fr ol { margin: 0; font-size: 13.5px; }
+.fr ul, .fr ol { padding-left: 18px; }
+.fr.goal { border-left: 4px solid var(--brand); }
+.fr.imp { border-left: 4px solid var(--po); }
+.fr.how { border-left: 4px solid var(--core); }
+
+/* ---------- Figure (screenshot + zoom hint) ---------- */
+.shot { margin: 0; }
+.shot figcaption { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.zbtn { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; color: inherit; font: inherit; }
+.zbtn img, .zbtn .ph { width: 100%; border: 1px solid var(--line); border-radius: 10px; display: block; }
+.zhint { position: absolute; right: 10px; top: 10px; background: var(--zoom-hint); color: #ffffff; font-size: 12px; padding: 3px 9px; border-radius: 99px; opacity: 0; transition: opacity 0.2s; }
+.zbtn:hover .zhint, .zbtn:focus-visible .zhint { opacity: 1; }
+.zbtn:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 12px; }
+.noimg, .shot.missing .ph { border: 1px dashed var(--line); border-radius: 10px; padding: 26px; text-align: center; color: var(--muted); font-size: 12.5px; }
+
+/* ---------- Diagram (inline SVG vocabulary) ---------- */
+.arch { width: 100%; height: auto; display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
+.arch .band { fill: var(--soft); stroke: var(--line); }
+.arch .lbl { font: 700 12px var(--font-sans); letter-spacing: 0.06em; fill: var(--muted); }
+.arch .lbl.ev { fill: var(--ev); }
+.arch .lbl.po { fill: var(--po); }
+.arch .b { stroke-width: 1.5; }
+.arch .b.ev { fill: var(--ev-s); stroke: var(--ev); }
+.arch .b.po { fill: var(--po-s); stroke: var(--po); }
+.arch .b.app { fill: var(--panel); stroke: var(--app); stroke-dasharray: 6 4; }
+.arch .b.fd { fill: var(--panel); stroke: var(--fd); }
+.arch .bt { font: 600 14px var(--font-sans); fill: var(--ink); }
+.arch .t { font-family: var(--font-sans); fill: var(--ink); }
+.arch .c { text-anchor: middle; }
+.arch .s { font-size: 11.5px; fill: var(--muted); }
+.arch .core { fill: var(--core-s); stroke: var(--core); stroke-width: 2.5; }
+.arch .core1 { font-size: 19px; font-weight: 800; fill: var(--core); }
+.arch .ar { fill: none; stroke-width: 2; }
+.arch .ar.ev { stroke: var(--ev); }
+.arch .ar.po { stroke: var(--po); }
+.arch .ar.in { stroke: var(--app); }
+.arch .ar.out { stroke: var(--core); }
+.arch .ahd { fill: var(--muted); }
+
+/* ---------- Responsive (source breakpoints) ---------- */
+.top{top:env(safe-area-inset-top,0px)}
+.clogo{font-weight:700;font-size:14px;color:var(--ink);white-space:nowrap;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.mainw{max-width:1180px;margin:0 auto;padding:26px 32px 90px}
+.maintabs{position:sticky;top:calc(var(--top) + env(safe-area-inset-top,0px));z-index:40;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);margin-top:22px;padding-top:4px}
+.maintabs .stab{font-size:15px;padding:12px 18px}
+.pane h2:first-child{margin-top:28px}
+.lead{max-width:860px}
+.gloss{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 18px}
+.gloss p{margin:0;font-size:13.5px}
+.gloss b{display:block;color:var(--brand)}
+.lg.core-l{background:var(--core)}
+.svc{margin:16px 0}
+.spec{grid-template-columns:1.3fr 0.8fr 1.4fr}
+.spec .sp b{font-size:13.5px}
+.spec .sp b.srcb{font-weight:500;color:var(--muted);font-size:12.5px}
+.io-b p{line-height:1.55}
+.howg{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.howg h5{margin:0 0 6px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.howg ol{margin:0;padding-left:20px;font-size:13.5px}
+.howg .keep{margin:0;font-size:13.5px;color:var(--ink)}
+.howg .keep b{color:var(--core)}
+.svc.po .chip.po,.chip.po{white-space:nowrap}
+.tybadge{font-size:11px;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:5px;background:var(--ev-s);color:var(--ev)}
+.tybadge.p{background:var(--core-s);color:var(--core)}
+.stage.proj{border-top-color:var(--core)}
+.stage .row{font-size:13.5px}
+td.num{white-space:nowrap;font-variant-numeric:tabular-nums}
+td.mut{color:var(--muted);font-size:12.5px}
+tr.grp td{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.fh{margin:18px 0 8px;font-size:15px}
+.fh small{font-weight:500;color:var(--muted);font-size:12.5px;margin-left:6px}
+.flow.fl4{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr}
+.flow.fl5{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr}
+.fstep.svc2{border-color:var(--po)}
+.fstep.svc2 .fn{background:var(--po-s);color:var(--po)}
+.fstep h4{font-size:14px}
+.whys{grid-template-columns:repeat(3,1fr)}
+.why-c h4{margin:2px 0 4px}
+.iox.big ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.iox.big li{margin:3px 0}
+.iox.big .io-b{padding:14px 18px}
+.calw{margin:12px 0 16px}
+.calh{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:8px}
+.calg{font-size:13.5px;color:var(--core);background:var(--core-s);padding:3px 10px;border-radius:99px;font-weight:600}
+.calg7{display:grid;grid-template-columns:repeat(5,1fr) .55fr .55fr;gap:8px}
+.cd{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 10px;min-height:96px;position:relative}
+.cdh{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.cdh b{color:var(--ink);font-variant-numeric:tabular-nums}
+.cd p{margin:6px 0 0;font-size:12.5px;line-height:1.4}
+.cd.ses{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.cd.ses .cdh,.cd.ses .cdh b{color:var(--on-brand)}
+.cd.ses p{font-weight:700;font-size:13px}
+.cd.prep{background:var(--brand-s)}
+.cd.try{background:var(--po-s)}
+.cd.today{outline:2px solid var(--core);outline-offset:1px}
+.cd em{position:absolute;right:8px;bottom:6px;font-style:normal;font-size:11px;font-weight:700;color:var(--core)}
+.ops{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+.op{padding:12px 14px;border-left:1px solid var(--line);border-top:4px solid var(--core)}
+.op:first-child{border-left:0}
+.op b{font-size:13px;color:var(--core)}
+.op h4{margin:2px 0 4px;font-size:14.5px}
+.op p{margin:0;font-size:13px;color:var(--muted)}
+.sess .stage header > div{min-width:0}
+.sess .keep{margin:4px 0 0}
+.foot{margin-top:48px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:1100px){.flow.fl5,.flow.fl4{grid-template-columns:1fr}.flow .farrow{transform:rotate(90deg)}}
+@media (max-width:980px){.mainw{padding:18px 16px 70px}.gloss,.howg,.whys,.ops{grid-template-columns:1fr}.op{border-left:0;border-top:4px solid var(--core)}.spec{grid-template-columns:1fr}.spec .sp{border-right:0;border-bottom:1px solid var(--line)}.calg7{grid-template-columns:1fr 1fr}.cd{min-height:0}.clogo{display:none}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+.arch .bt{font-size:13.5px}
+.arch .s{font-size:11px}
+#spaces{grid-template-columns:repeat(4,minmax(0,1fr))}
+.pill{white-space:nowrap}
+@media (max-width:1100px){#spaces{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){#spaces{grid-template-columns:1fr}}
+
+.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.role{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--ev);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.role.po{border-top-color:var(--po)}
+.role header{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.role h4{margin:0;font-size:16px}
+.role header span{color:var(--muted);font-size:13px}
+.role .apps{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 10px}
+.role .rl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:8px 0 3px}
+.role ul{margin:0;padding-left:18px;font-size:14px}
+.role p{margin:0;font-size:14px}
+@media (max-width:1100px){.roles{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.roles{grid-template-columns:1fr}}
+.goals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.goal{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--brand);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.goal .gi{font-size:24px;line-height:1}
+.goal h4{margin:8px 0 4px;font-size:17px}
+.goal p{margin:0;font-size:14px;color:var(--muted)}
+.mmwrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.mm{display:flex;align-items:center;min-width:1000px;--c:var(--fd)}
+.mm-tree{display:flex;align-items:center}
+.mm-node{flex:0 0 auto;border-radius:14px;padding:12px 16px;display:flex;flex-direction:column;gap:2px}
+.mm-node b{font-size:16px}
+.mm-node span{font-size:12.5px;opacity:.9}
+.mm-root{background:var(--brand);color:var(--on-brand);width:160px}
+.mm-root b{font-size:19px}
+.mm-l1{width:170px;border:2px solid var(--ev);background:var(--ev-s);color:var(--ev)}
+.mm-l1.po{border-color:var(--po);background:var(--po-s);color:var(--po)}
+.mm-l1 span{color:var(--ink)}
+.mm-kids{display:flex;flex-direction:column;margin-left:16px;position:relative}
+.mm-kids::before{content:"";position:absolute;left:-16px;top:50%;width:16px;border-top:2px solid var(--c)}
+.mm-kids.ev{--c:var(--ev)}
+.mm-kids.po{--c:var(--po)}
+.mm-ch{position:relative;padding:7px 0 7px 22px}
+.mm-ch::before{content:"";position:absolute;left:0;top:50%;width:22px;border-top:2px solid var(--c)}
+.mm-ch::after{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--c)}
+.mm-ch:first-child::after{top:50%}
+.mm-ch:last-child::after{bottom:50%}
+.mm-ch:only-child::after{display:none}
+.mm-leaf{width:560px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--ev);border-radius:12px;padding:10px 14px}
+.mm-leaf.po{border-left-color:var(--po)}
+.mm-leaf h4{margin:0;font-size:15px}
+.mm-m{font-size:12.5px;color:var(--muted);margin:2px 0 6px}
+.mm-m b{color:var(--ink);font-weight:600}
+.mm-leaf ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.mm-leaf li{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:4px;font-size:13.5px}
+.mm-leaf li em{font-style:normal;font-size:12px;color:var(--muted)}
+.mm-leaf.po ul{grid-template-columns:repeat(4,1fr)}
+.cd.run{background:var(--core-s);border-color:color-mix(in srgb,var(--core) 35%,transparent)}
+.cd.run p{color:var(--core);font-weight:600}
+@media (max-width:980px){
+ .goals{grid-template-columns:1fr}
+ .mmwrap{padding:12px;overflow:visible}
+ .mm,.mm-tree{flex-direction:column;align-items:stretch;min-width:0}
+ .mm-node{width:auto}
+ .mm-kids{margin-left:12px;margin-top:8px}
+ .mm-kids::before{display:none}
+ .mm-ch{padding:6px 0 6px 16px}
+ .mm-ch::before{width:16px;top:28px}
+ .mm-ch:first-child::after{top:0}
+ .mm-ch:last-child::after{bottom:auto;height:28px}
+ .mm-ch:only-child::after{display:block}
+ .mm-leaf{width:auto}
+ .mm-leaf ul,.mm-leaf.po ul{grid-template-columns:1fr 1fr}
+}
+.mm-leaf{width:660px}
+.mm-root b{white-space:nowrap}
+@media (max-width:980px){.mm-leaf{width:auto}}
+
+/* mind map v2: App → Không gian → Nhóm công việc → Đầu việc */
+.mm4{min-width:1080px;--c:var(--fd)}
+.mm4 .mm-tree{display:flex;align-items:center}
+.mm4 .mm-node{flex:0 0 auto;border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:1px}
+.mm4 .mm-node b{font-size:14.5px;line-height:1.3}
+.mm4 .mm-node span{font-size:12px;color:var(--muted)}
+.mm4 .mm-node .ty{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;opacity:.85}
+.mm4 .mm-root{width:130px;background:var(--brand);color:var(--on-brand)}
+.mm4 .mm-root b{font-size:18px;white-space:nowrap}
+.mm4 .mm-root span{color:var(--on-brand);opacity:.85}
+.mm4 .mm-l1{width:136px;border:2px solid var(--ev);background:var(--ev-s);color:var(--ev)}
+.mm4 .mm-l1.po{border-color:var(--po);background:var(--po-s);color:var(--po)}
+.mm4 .mm-l1 b{font-size:15.5px}
+.mm4 .mm-l2{width:172px;background:var(--panel);border:1.5px solid var(--ev);color:var(--ink)}
+.mm4 .mm-l2 .ty{color:var(--ev)}
+.mm4 .mm-l2.po{border-color:var(--po)}
+.mm4 .mm-l2.po .ty{color:var(--po)}
+.mm4 .mm-l3{width:196px;background:var(--soft);border:1px solid var(--line);color:var(--ink);padding:7px 11px}
+.mm4 .mm-l3 b{font-size:13.5px;font-weight:600}
+.mm4 .mm-l3 .ty{color:var(--po)}
+.mm4 .mm-kids{display:flex;flex-direction:column;margin-left:14px;position:relative}
+.mm4 .mm-kids::before{content:"";position:absolute;left:-14px;top:50%;width:14px;border-top:2px solid var(--c)}
+.mm4 .mm-kids.ev{--c:color-mix(in srgb,var(--ev) 55%,var(--panel))}
+.mm4 .mm-kids.po{--c:color-mix(in srgb,var(--po) 55%,var(--panel))}
+.mm4 .mm-ch{position:relative;padding:4px 0 4px 18px}
+.mm4 .mm-ch::before{content:"";position:absolute;left:0;top:50%;width:18px;border-top:2px solid var(--c)}
+.mm4 .mm-ch::after{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--c)}
+.mm4 .mm-ch:first-child::after{top:50%}
+.mm4 .mm-ch:last-child::after{bottom:50%}
+.mm4 .mm-ch:only-child::after{display:none}
+.mm4 .mm-kids.one{margin-left:10px}
+.mm4 .mm-kids.one::before{left:-10px;width:10px}
+.mm4 .mm-kids.one>.mm-ch{padding-left:12px}
+.mm4 .mm-kids.one>.mm-ch::before{width:12px}
+.mm4 .mm-l2 + .mm-kids{margin-top:6px;margin-bottom:6px}
+.mm-tasks,.mm-flow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;max-width:380px}
+.tk{display:inline-block;font-size:12.5px;padding:3px 9px;border-radius:7px;background:var(--panel);border:1px solid var(--line);color:var(--ink);line-height:1.35}
+.tk.st{border-color:color-mix(in srgb,var(--po) 40%,transparent);background:var(--po-s)}
+.mm-flow .fa{color:var(--muted);font-size:13px}
+.rc{font-style:normal;font-weight:800;color:var(--core);margin-left:2px}
+.mm-cols{display:grid;grid-template-columns:150px 168px 204px 224px 1fr;margin:0 0 10px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:8px}
+.mm-cols span:first-child::before{content:""}
+@media (max-width:980px){
+ .mm4{min-width:0}
+ .mm-cols{display:none}
+ .mm4 .mm-tree{flex-direction:column;align-items:stretch}
+ .mm4 .mm-node{width:auto!important}
+ .mm4 .mm-kids,.mm4 .mm-kids.one{margin-left:10px;margin-top:6px}
+ .mm4 .mm-kids::before{display:none}
+ .mm4 .mm-ch{padding:4px 0 4px 14px}
+ .mm4 .mm-ch::before{width:14px;top:22px}
+ .mm4 .mm-ch:first-child::after{top:0}
+ .mm4 .mm-ch:last-child::after{bottom:auto;height:22px}
+ .mm4 .mm-ch:only-child::after{display:block}
+ .mm-tasks,.mm-flow{max-width:none}
+}
+.mm-tasks,.mm-flow{max-width:560px}
+.mm4 .mm-root{width:146px}
+.mm4 .mm-root b{font-size:17px}
+.mm-cols span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px}
+
+/* org chart top-down */
+.oc{min-width:1080px;--c:var(--fd);--g:22px}
+.oc .oc-u{display:flex;justify-content:center;margin:0;padding:var(--g) 0 0;position:relative}
+.oc .oc-i{list-style:none;position:relative;padding:var(--g) 5px 0;display:flex;flex-direction:column;align-items:center}
+.oc > .oc-u{padding-top:0}
+.oc > .oc-u > .oc-i{padding-top:0}
+.oc .oc-i::before,.oc .oc-i::after{content:"";position:absolute;top:0;right:50%;width:50%;height:var(--g);border-top:2px solid var(--c)}
+.oc .oc-i::after{right:auto;left:50%;border-left:2px solid var(--c)}
+.oc .oc-i:only-child::before{display:none}
+.oc .oc-i:only-child::after{border-top:0}
+.oc .oc-i:first-child::before,.oc .oc-i:last-child::after{border:0 none}
+.oc .oc-i:last-child::before{border-right:2px solid var(--c);border-radius:0 8px 0 0}
+.oc .oc-i:first-child::after{border-radius:8px 0 0 0}
+.oc .oc-i:only-child::after{border-left:2px solid var(--c);border-radius:0}
+.oc .oc-u .oc-u::before{content:"";position:absolute;top:0;left:50%;height:var(--g);border-left:2px solid var(--c)}
+.oc > .oc-u > .oc-i::before,.oc > .oc-u > .oc-i::after{display:none}
+.oc .oc-u.ev{--c:color-mix(in srgb,var(--ev) 60%,var(--panel))}
+.oc .oc-u.po{--c:color-mix(in srgb,var(--po) 60%,var(--panel))}
+.oc-n{border-radius:12px;padding:9px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;position:relative;z-index:1}
+.oc-n b{font-size:14.5px;line-height:1.3}
+.oc-n span{font-size:12px;color:var(--muted)}
+.oc-n .ty{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.oc-n.mm-root{background:var(--brand);color:var(--on-brand);padding:12px 26px}
+.oc-n.mm-root b{font-size:19px}
+.oc-n.mm-root span{color:var(--on-brand);opacity:.85}
+.oc-n.mm-l1{border:2px solid var(--ev);background:var(--ev-s);color:var(--ev);min-width:170px}
+.oc-n.mm-l1.po{border-color:var(--po);background:var(--po-s);color:var(--po)}
+.oc-n.mm-l1 b{font-size:16px}
+.oc-n.mm-l2{width:200px;min-height:78px;justify-content:center;background:var(--panel);border:1.5px solid var(--ev);color:var(--ink)}
+.oc-n.mm-l2 .ty{color:var(--ev)}
+.oc-n.mm-l2.po{border-color:var(--po)}
+.oc-n.mm-l2.po .ty{color:var(--po)}
+.oc-stack{width:200px;display:flex;flex-direction:column;gap:6px;padding-top:14px;position:relative}
+.oc-stack::before{content:"";position:absolute;top:0;left:50%;height:14px;border-left:2px dashed color-mix(in srgb,var(--ev) 50%,var(--panel))}
+.oc-stack.po::before{border-left-color:color-mix(in srgb,var(--po) 50%,var(--panel))}
+.tl{background:var(--soft);border:1px solid var(--line);border-top:3px solid color-mix(in srgb,var(--ev) 55%,var(--panel));border-radius:10px;padding:7px 10px}
+.tl.po{border-top-color:color-mix(in srgb,var(--po) 60%,var(--panel));background:var(--po-s)}
+.tl .ty{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--po)}
+.tl h5{margin:0 0 3px;font-size:13px;color:var(--ink);line-height:1.3}
+.tl ul,.tl ol{margin:0;padding-left:16px;font-size:12.2px;line-height:1.45;color:var(--ink)}
+.tl ul li::marker{color:var(--muted)}
+.tl .steps li::marker{color:var(--po);font-weight:700}
+.oc-hint{margin:0 0 10px}
+@media (max-width:980px){
+ .oc{min-width:0}
+ .oc .oc-u{flex-direction:column;align-items:stretch;padding:8px 0 0 12px}
+ .oc > .oc-u{padding-left:0}
+ .oc .oc-i{padding:6px 0 0;align-items:stretch}
+ .oc .oc-i::before,.oc .oc-i::after,.oc .oc-u .oc-u::before,.oc-stack::before{display:none}
+ .oc .oc-u .oc-u{border-left:2px solid var(--c)}
+ .oc-n{align-items:flex-start;text-align:left}
+ .oc-n.mm-l2,.oc-stack{width:auto}
+ .oc-n.mm-l2{min-height:0}
+ .oc-stack{padding:6px 0 4px 10px}
+}
+.oc-n.mm-root span{white-space:nowrap}
+.oc-n.mm-l1{width:200px;justify-content:center}
+.oc-n.mm-root{width:auto}
+.tl{padding:8px 11px;display:flex;flex-direction:column}
+.oc-stack{gap:8px}
+.oc-n.mm-l2{justify-content:center}
+.clogo img{height:26px;display:block}
+
+/* ---- Five Stars extensions ---- */
+.lg.wf{background:var(--app)}.lg.of{background:var(--cyan)}.lg.hr{background:var(--core)}
+.oc-n.mm-l1.wf{border-color:var(--app);background:var(--app-s);color:var(--app)}
+.oc-n.mm-l1.of{border-color:var(--cyan);background:color-mix(in srgb,var(--cyan) 12%,var(--panel));color:var(--cyan)}
+.oc-n.mm-l1.hr{border-color:var(--core);background:var(--core-s);color:var(--core)}
+.oc-n.mm-l2.wf{border-color:var(--app)}.oc-n.mm-l2.wf .ty{color:var(--app)}
+.oc-n.mm-l2.of{border-color:var(--cyan)}.oc-n.mm-l2.of .ty{color:var(--cyan)}
+.oc-n.mm-l2.hr{border-color:var(--core)}.oc-n.mm-l2.hr .ty{color:var(--core)}
+.oc .oc-u.wf{--c:color-mix(in srgb,var(--app) 60%,var(--panel))}
+.oc .oc-u.of{--c:color-mix(in srgb,var(--cyan) 60%,var(--panel))}
+.oc .oc-u.hr{--c:color-mix(in srgb,var(--core) 60%,var(--panel))}
+.oc-stack.wf::before{border-left-color:color-mix(in srgb,var(--app) 50%,var(--panel))}
+.oc-stack.of::before{border-left-color:color-mix(in srgb,var(--cyan) 50%,var(--panel))}
+.oc-stack.hr::before{border-left-color:color-mix(in srgb,var(--core) 50%,var(--panel))}
+.tl.wf{border-top-color:var(--app)}.tl.of{border-top-color:var(--cyan)}.tl.hr{border-top-color:var(--core)}
+.appblk{margin:0 0 22px;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:16px 8px;overflow-x:auto}
+.appblk .oc{min-width:0;width:max-content;margin:0 auto}
+.appblk .oc-u{padding-top:var(--g)}
+.appblk>.oc>.oc-u{padding-top:0}
+.kpis{grid-template-columns:repeat(4,1fr)}
+.statg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:8px 0 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);padding:10px 14px;border-radius:0 10px 10px 0}
+.stat b{display:block;font-size:26px;line-height:1.15;color:var(--c)}.stat span{font-size:12.5px;color:var(--muted)}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.tbl table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+.tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--soft);font-weight:600;font-size:12.5px;color:var(--muted)}
+.tbl tr:last-child td{border-bottom:0}.tbl td.code{font-weight:700;white-space:nowrap;color:var(--muted)}
+.atag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;margin:1px 2px 1px 0;background:var(--s);color:var(--c)}
+.a-wf{--c:var(--app);--s:var(--app-s)}.a-ww{--c:var(--ev);--s:var(--ev-s)}.a-rq{--c:var(--po);--s:var(--po-s)}
+.a-of{--c:var(--cyan);--s:color-mix(in srgb,var(--cyan) 14%,var(--panel))}.a-hr{--c:var(--core);--s:var(--core-s)}
+.a-na{--c:var(--fd);--s:var(--fd-s)}.a-no{--c:var(--muted);--s:var(--soft)}
+.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px}
+.chip{font:600 13px var(--font-sans);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--c,var(--brand));border-color:var(--c,var(--brand));color:var(--on-brand)}
+.fsearch{flex:1 1 240px;font:14px var(--font-sans);padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.cnt{font-size:13px;color:var(--muted);margin:0 0 8px}.mut{color:var(--muted)}
+@media (max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.appblk .oc{width:auto}}
+
+</style>
+</head>
+<body class="hb">
+<header class="top">
+  <a class="brand" href="#nghiep-vu" aria-label="Base.vn"><span class="wm">Base.vn</span></a>
+  <div class="tdiv"></div>
+  <div class="clogo" id="clogo"></div>
+  <div class="ttl" id="ttl"></div>
+  <div class="tools"><button class="themeb" id="themeb" type="button" aria-label="Đổi giao diện sáng/tối">◐</button></div>
+</header>
+
+<main class="mainw">
+  <section class="hero">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="h1"></h1>
+    <p class="lead" id="lead"></p>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <div class="stabs maintabs" role="tablist" aria-label="Nội dung tài liệu">
+    <button class="stab on" role="tab" id="t-nghiep-vu" aria-controls="nghiep-vu" aria-selected="true" data-tab="nghiep-vu">Phạm vi triển khai</button>
+    <button class="stab" role="tab" id="t-danh-muc" aria-controls="danh-muc" aria-selected="false" data-tab="danh-muc">Danh mục số hóa</button>
+    <button class="stab" role="tab" id="t-lo-trinh" aria-controls="lo-trinh" aria-selected="false" data-tab="lo-trinh">Lộ trình triển khai</button>
+  </div>
+
+  <section class="pane" id="nghiep-vu" role="tabpanel" aria-labelledby="t-nghiep-vu">
+    <h2><span class="sn">1</span>Mục tiêu triển khai</h2>
+    <div class="goals" id="goals"></div>
+    <h2><span class="sn">2</span>Giải pháp</h2>
+    <div class="legend" id="legend"></div>
+    <p class="hint oc-hint">Mỗi khối là một ứng dụng: ứng dụng → nhóm / không gian → nhóm công việc, quy trình, mẫu đơn → đầu việc, bước duyệt</p>
+    <div id="mm"></div>
+  </section>
+
+  <section class="pane" id="danh-muc" role="tabpanel" aria-labelledby="t-danh-muc" hidden>
+    <h2><span class="sn">1</span>Tổng quan danh mục</h2>
+    <p class="lead">55 mã biểu mẫu (56 phiếu) từ 10 quy trình ISO, mỗi phiếu xếp vào một ứng dụng Base.</p>
+    <div class="statg" id="stats"></div>
+    <h2><span class="sn">2</span>Mapping 10 quy trình về giải pháp</h2>
+    <div class="tbl"><table><thead><tr><th>Quy trình</th><th>Ứng dụng</th><th>Phương án số hóa</th></tr></thead><tbody id="qtBody"></tbody></table></div>
+    <h2><span class="sn">3</span>Danh mục biểu mẫu</h2>
+    <div class="fbar" role="group" aria-label="Lọc theo ứng dụng" id="chips"></div>
+    <div class="fbar"><input class="fsearch" id="fq" type="search" placeholder="Tìm mã, tên phiếu, quy trình…" aria-label="Tìm biểu mẫu"></div>
+    <p class="cnt" id="count" aria-live="polite"></p>
+    <div class="tbl"><table><thead><tr><th>Mã</th><th>Biểu mẫu</th><th>Quy trình</th><th>Ứng dụng</th><th>Phương thức số hóa</th><th>Ghi chú</th></tr></thead><tbody id="catBody"></tbody></table></div>
+  </section>
+
+  <section class="pane" id="lo-trinh" role="tabpanel" aria-labelledby="t-lo-trinh" hidden>
+    <h2><span class="sn">1</span>Mục tiêu dự án</h2>
+    <div class="iox big">
+      <div class="io-b in"><span>Hiện trạng</span><ul id="before"></ul></div>
+      <div class="io-ar">→</div>
+      <div class="io-b out"><span>Sau triển khai</span><ul id="after"></ul></div>
+    </div>
+    <h2><span class="sn">2</span>Timeline triển khai</h2>
+    <p class="lead">5 buổi làm việc trong 3 tuần, vận hành từ sau buổi đào tạo. Ngày các buổi là dự kiến.</p>
+    <div class="legend"><span><i class="lg hris"></i>Buổi làm việc online</span><span><i class="lg mixed"></i>Base chuẩn bị</span><span><i class="lg po"></i>Khách hàng thiết lập, dùng thử</span><span><i class="lg core-l"></i>Vận hành</span></div>
+    <div class="cal" id="cal"></div>
+    <h2><span class="sn">3</span>Chi tiết buổi làm việc</h2>
+    <div class="stages sess" id="sess"></div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</main>
+
+<script>
+const D = {"client": {"legal_name": "Công ty Cổ phần Đầu tư Five Stars Việt Nam", "short": "Five Stars VN", "unit": "Five Stars Việt Nam", "logo_data_uri": ""}, "product": "Base Work+ & HRM-Basic", "hero_lead": "Số hóa quy trình mua hàng, thanh toán, quản lý đề xuất phê duyệt, công việc theo phòng ban và nhân sự cơ bản. Xoay quanh vòng đời một hợp đồng thiết bị.", "kpis": [["5", "ứng dụng Base"], ["10", "quy trình ISO được số hóa"], ["55", "mã biểu mẫu đưa vào danh mục"], ["5", "buổi làm việc"]], "goals": [{"icon": "🔗", "title": "Số hóa quy trình xuyên suốt hợp đồng", "text": "Mua hàng, giao nhận, thanh toán chạy trên Base, gắn Mã dự án / Số hợp đồng."}, {"icon": "✅", "title": "Đề xuất và phê duyệt tập trung", "text": "Tạm ứng, thanh toán, xuất hóa đơn, yêu cầu nội bộ duyệt một nơi, có lịch sử."}, {"icon": "👥", "title": "Quản lý công việc và nhân sự", "text": "Việc theo phòng ban, dự án có kế hoạch so với thực tế. Hồ sơ, công, lương cùng một hệ thống."}], "solution": {"apps": [{"name": "Base Workflow", "sub": "Quy trình nhiều bước", "kind": "wf", "groups": [{"type": "Nhóm quy trình", "name": "Kinh doanh", "manager": "", "lists": [{"name": "WF Cơ hội – Đấu thầu – Ký HĐ", "items": ["Khảo sát, phương án kỹ thuật", "Lập dự toán, BGĐ duyệt", "Báo giá, đấu thầu, ký HĐ"]}, {"name": "WF Bảo hành sửa chữa", "items": ["Tiếp nhận, kiểm tra hạn BH", "Nhận thiết bị, xử lý", "Bàn giao lại"]}]}, {"type": "Nhóm quy trình", "name": "Mua hàng – Kho", "manager": "", "lists": [{"name": "WF Mua hàng – Nhận hàng", "items": ["Đề nghị mua, so sánh ≥3 NCC", "Ký HĐ, theo dõi sản xuất", "Kiểm tra hàng, nhập kho"]}, {"name": "WF Xuất kho", "items": ["Đề nghị xuất hàng", "Kiểm tra công nợ, tồn kho", "Lập phiếu, xuất kho"]}]}, {"type": "Nhóm quy trình", "name": "Nhân sự", "manager": "", "lists": [{"name": "WF Tuyển dụng", "items": ["Đăng tuyển, sàng lọc hồ sơ", "Phỏng vấn vòng 1–2", "Kết luận → Base Onboard"]}, {"name": "WF Nghỉ việc", "items": ["Bàn giao công việc", "Thu hồi tài sản, công nợ", "Thanh lý HĐ, chốt BHXH"]}]}]}, {"name": "Base WeWork", "sub": "Quản lý công việc, dự án", "kind": "ev", "groups": [{"type": "Project", "name": "Dự án triển khai hợp đồng (mẫu)", "manager": "Quản lý dự án", "lists": [{"name": "Kế hoạch & bảo lãnh", "items": ["Kế hoạch triển khai", "Bảo lãnh hợp đồng"]}, {"name": "Mua hàng – Giao hàng", "items": ["Mỗi đơn mua là một đầu việc", "Biên bản giao nhận"]}, {"name": "Lắp đặt – chạy thử", "items": ["Khảo sát mặt bằng", "Lắp đặt", "BB kiểm tra chạy thử"]}, {"name": "Huấn luyện – CGCN", "items": ["Kế hoạch huấn luyện", "BB chuyển giao công nghệ"]}, {"name": "Nghiệm thu – Quyết toán", "items": ["BB nghiệm thu", "Hồ sơ quyết toán"]}]}, {"type": "Team", "name": "Bảo trì định kỳ", "manager": "", "lists": [{"name": "Lịch bảo trì theo HĐ", "items": [{"t": "Bảo trì thiết bị", "r": true}, "Kiểm tra", "Bàn giao lại"]}]}, {"type": "Team", "name": "Công việc nội bộ", "manager": "", "lists": [{"name": "Giao việc", "items": ["Phiếu giao việc"]}, {"name": "Báo cáo – kế hoạch tuần", "items": [{"t": "Báo cáo tuần", "r": true}, {"t": "Kế hoạch tuần", "r": true}]}]}]}, {"name": "Base Request", "sub": "Đề xuất, phê duyệt", "kind": "po", "groups": [{"type": "Nhóm phân loại", "name": "Tài chính", "manager": "", "lists": [{"name": "Đề nghị tạm ứng", "flow": ["Người đề nghị", "Trưởng bộ phận", "Kế toán", "TGĐ"]}, {"name": "Đề nghị thanh toán", "flow": ["Người đề nghị", "Trưởng bộ phận", "Kế toán", "TGĐ"]}, {"name": "Thanh toán công tác phí", "flow": ["Người đề nghị", "Trưởng bộ phận", "Kế toán"]}, {"name": "Đề nghị xuất hóa đơn", "flow": ["Người đề nghị", "Kế toán"]}]}, {"type": "Nhóm phân loại", "name": "Yêu cầu nội bộ", "manager": "", "lists": [{"name": "Yêu cầu nội bộ", "flow": ["Người yêu cầu", "Trưởng bộ phận", "Bộ phận xử lý"]}, {"name": "Mượn / hủy hồ sơ", "flow": ["Người đề nghị", "Quản lý tài liệu"]}]}, {"type": "Nhóm phân loại", "name": "Nhân sự", "manager": "", "lists": [{"name": "Yêu cầu tuyển dụng", "flow": ["Trưởng bộ phận", "HCNS", "TGĐ"]}, {"name": "Đánh giá thử việc", "flow": ["Quản lý trực tiếp", "Trưởng bộ phận", "HCNS", "TGĐ"]}, {"name": "Đơn xin nghỉ việc", "flow": ["Nhân viên", "Trưởng bộ phận", "HCNS", "TGĐ"]}]}]}, {"name": "Base Office", "sub": "Công văn, quy định", "kind": "of", "groups": [{"type": "Văn bản", "name": "Công văn – Quy định", "manager": "", "lists": [{"name": "Công văn đi tới CĐT", "items": ["Giải trình, gia hạn HĐ", "Đề nghị tạm ứng, thanh toán", "Giấy giới thiệu"]}, {"name": "Công văn đến", "items": ["Tiếp nhận", "Phân phối xử lý", "Lưu trữ"]}, {"name": "Quy định ISO", "items": ["Ban hành, sửa đổi", "Sổ giao nhận tài liệu"]}]}]}, {"name": "Bộ HRM-Basic", "sub": "Nhân sự, công, lương", "kind": "hr", "groups": [{"type": "Module", "name": "Hồ sơ nhân sự", "manager": "", "lists": [{"name": "Base Onboard", "items": ["Thư mời nhận việc", "Checklist hồ sơ", "Cấp phát tài sản"]}, {"name": "Base HRM", "items": ["Hồ sơ nhân sự", "HĐ, quyết định", "Kết quả thử việc"]}]}, {"type": "Module", "name": "Công và nghỉ", "manager": "", "lists": [{"name": "Base Schedule", "items": ["Phân ca", "Chấm công", "Thẻ chấm công"]}, {"name": "Base Timeoff", "items": ["Nghỉ phép, thai sản", "Làm thêm giờ", "Giải trình công"]}]}, {"type": "Module", "name": "Lương", "manager": "", "lists": [{"name": "Base Payroll", "items": ["Chốt công", "Bảng lương", "Thưởng KPI (nhập tay)"]}]}]}]}, "objective": {"before": ["Biểu mẫu giấy / Excel, mã phiếu chưa thống nhất", "Mua hàng, thanh toán, đề xuất khó theo dõi theo dự án", "Công, nghỉ, lương xử lý tách rời"], "after": ["Quy trình, đề xuất chạy trên Base, gắn Mã dự án / Số hợp đồng", "Phê duyệt có lịch sử, tra cứu nhanh", "Hồ sơ, công, lương cùng hệ thống"]}, "sessions": [{"date": "2026-11-09", "title": "Chốt phạm vi & hướng dẫn thiết lập", "who": "Ban dự án Five Stars", "content": ["Chốt phạm vi triển khai và danh mục số hóa", "Hướng dẫn thao tác thiết lập không gian, dự án trên Base WeWork", "Hướng dẫn thiết lập quy trình trên Base Workflow, mẫu đơn trên Base Request"], "result": "Phạm vi được chốt. Ban dự án tự thiết lập được Work+.", "when": "Thứ 2, 09/11 · online"}, {"date": "2026-11-12", "title": "Review thiết lập Work+", "who": "Ban dự án Five Stars", "content": ["Rà soát không gian, dự án trên Base WeWork", "Rà soát quy trình Base Workflow, mẫu đơn Base Request", "Tối ưu thiết lập"], "result": "Thiết lập Work+ hoàn chỉnh, sẵn sàng dùng thật.", "when": "Thứ 5, 12/11 · online"}, {"date": "2026-11-17", "title": "Hồ sơ nhân sự & phân ca công", "who": "Ban dự án, nhân sự phụ trách HRM", "content": ["Thiết lập hồ sơ nhân sự trên Base HRM, Base Onboard", "Thiết lập ca làm việc, quy tắc công trên Base Schedule", "Thiết lập loại nghỉ trên Base Timeoff"], "result": "Có hồ sơ nhân sự và ca làm việc trên hệ thống.", "when": "Thứ 3, 17/11 · online"}, {"date": "2026-11-20", "title": "Chốt công & bảng lương", "who": "Ban dự án, nhân sự phụ trách HRM, Kế toán", "content": ["Chốt công từ chấm công, nghỉ, làm thêm giờ", "Thiết lập bảng lương trên Base Payroll", "Chạy thử và đối chiếu"], "result": "Bảng lương chạy thử khớp với số liệu hiện tại.", "when": "Thứ 6, 20/11 · online"}, {"date": "2026-11-24", "title": "Đào tạo nhân sự", "who": "Toàn bộ nhân sự", "content": ["Đăng nhập phần mềm", "Nhận việc, báo cáo việc trên Base WeWork", "Tạo đề xuất trên Base Request, chấm công, xin nghỉ trên Base HRM"], "result": "Toàn bộ nhân sự sử dụng được hệ thống.", "when": "Thứ 3, 24/11 · online"}], "cal": {"mon": "2026-11-09", "today": "2026-11-09", "goals": ["Chốt phạm vi, tự thiết lập Work+", "Review Work+, hồ sơ nhân sự, phân ca công, chốt công, bảng lương", "Đào tạo toàn bộ nhân sự, vận hành"], "days": {"2026-11-09": ["ses", "Buổi 1 · Chốt phạm vi"], "2026-11-10": ["try", "Tự thiết lập Work+"], "2026-11-11": ["try", "Tự thiết lập Work+"], "2026-11-12": ["ses", "Buổi 2 · Review Work+"], "2026-11-13": ["try", "Dùng thử, chỉnh theo review"], "2026-11-16": ["try", "Dùng thử Work+"], "2026-11-17": ["ses", "Buổi 3 · Hồ sơ NS, phân ca"], "2026-11-18": ["try", "Nhập hồ sơ nhân sự"], "2026-11-19": ["try", "Nhập ca, công"], "2026-11-20": ["ses", "Buổi 4 · Chốt công, lương"], "2026-11-23": ["try", "Chạy thử bảng công, lương"], "2026-11-24": ["ses", "Buổi 5 · Đào tạo nhân sự"], "2026-11-25": ["run", "Vận hành chính thức"], "2026-11-26": ["run", "Vận hành"], "2026-11-27": ["run", "Vận hành"]}}, "footer": "Dựa trên bộ 10 quy trình ISO và 55 biểu mẫu khách cung cấp. Ngày các buổi 2–5, danh sách phòng ban và luồng duyệt Base Request là dự kiến, chốt lại ở buổi 1.", "QT": [["QT01 – Thực hiện dự án", [["wf"], ["ww"], ["rq"], ["of"]], "Bước 1–4 (tiếp cận → ký HĐ) là WF Cơ hội – Đấu thầu. Bước 5 (triển khai) là dự án WeWork. Quyết toán gọi Request xuất hóa đơn và Office công văn đề nghị thanh toán CĐT."], ["QT02 – Kiểm soát tài liệu", [["of"], ["rq"]], "Ban hành / sửa đổi quy định, sổ giao nhận, lưu trữ trên Base Office. Mượn và hủy hồ sơ là Request."], ["QT03 – Quản lý nhân sự", [["rq"], ["wf"], ["hr"]], "Yêu cầu tuyển dụng (Request) → WF Tuyển dụng → Base Onboard → Base HRM. Nghỉ việc: Request đơn nghỉ → WF Nghỉ việc → cập nhật HRM."], ["QT04 – Xuất nhập hàng hóa", [["wf"]], "Nhập kho là bước cuối của WF Mua hàng – Nhận hàng. Xuất kho là WF Xuất kho riêng (xuất bán, dự án, bảo hành)."], ["QT05 – Thanh toán tạm ứng", [["rq"], ["na"]], "Tạm ứng, thanh toán (cá nhân + NCC), công tác phí, xuất hóa đơn, dự trù chi phí tuần là Request. Thu công nợ phải thu giữ trên phần mềm kế toán."], ["QT06 – Mua hàng", [["wf"]], "WF Mua hàng – Nhận hàng, mỗi đơn mua / NCC là 1 job, liên kết dự án."], ["QT07 – Phương án kỹ thuật", [["wf"]], "Các bước PAKT → tìm đối tác → chốt PAKT nằm trong WF Cơ hội – Đấu thầu, giữ vòng lặp “không đạt”."], ["QT08 – Kiểm tra hàng hóa", [["wf"]], "Các bước Theo dõi sản xuất, Kiểm tra hàng hóa trong WF Mua hàng, checklist theo hướng dẫn 08."], ["QT09 – CGCN, nghiệm thu", [["ww"], ["of"]], "Nhóm việc Lắp đặt – chạy thử, Huấn luyện – CGCN, Nghiệm thu trong dự án WeWork. Thông báo huấn luyện phát hành qua Office."], ["QT10 – Bảo hành bảo trì", [["wf"], ["ww"]], "Bảo hành sửa chữa là WF Bảo hành. Bảo trì định kỳ là việc lặp lịch trên WeWork, lỗi không xử lý được chuyển sang WF Bảo hành."]], "F": [["01", "Phiếu yêu cầu", "Chung", "rq", "", "Form “Yêu cầu nội bộ”", "Gộp với 23, thêm trường Loại yêu cầu"], ["02", "Báo cáo – kế hoạch tuần", "QT05 5.4", "ww", "", "Báo cáo tuần trên WeWork", "Cột kinh phí dự kiến → Request Dự trù chi phí tuần"], ["03", "Phiếu đề nghị mua hàng", "QT01, QT06", "wf", "", "Bước khởi tạo WF Mua hàng", "Bảng hàng hóa: tên, model, hãng, ĐVT, đơn giá, SL"], ["04", "Phiếu đề nghị tạm ứng", "QT05", "rq", "", "Form Request", "Hạn hoàn ứng → nhắc hạn"], ["05", "Đề nghị thanh toán", "QT05, QT06", "rq", "", "Form Request", "Bảng chứng từ, đối trừ số đã tạm ứng"], ["06", "Bảng kiểm tra tiến độ sản xuất", "QT06, QT08", "wf", "", "Bước Theo dõi sản xuất – WF Mua hàng", "Chỉ áp dụng hàng đặt sản xuất"], ["07", "Phiếu nhập kiêm BB kiểm tra hàng hóa", "QT08, QT04", "wf", "", "Bước Kiểm tra & Nhập kho – WF Mua hàng", "3 bên xác nhận: XNK, Kế toán, Kỹ thuật"], ["08", "Hướng dẫn kiểm tra hàng hóa", "QT08", "wf", "", "Checklist bắt buộc tại bước kiểm tra", "Tài liệu tham chiếu, không phải phiếu"], ["09", "Kế hoạch bàn giao", "QT07, QT09", "ww", "", "Nhóm việc Lắp đặt – CGCN theo timeline", "Sheet Tổng hợp thiết kế → danh mục thiết bị dự án"], ["10", "BB giao nhận chuyển phát hàng hóa", "QT01", "ww", "", "Đầu việc Giao hàng + file biên bản", "Cước phí → Request thanh toán"], ["11", "BB giao nhận thiết bị (chưa lắp đặt)", "QT01, QT04", "ww", "", "Đầu việc Bàn giao hàng hóa + file", "Đánh giá tác phong KTV"], ["12", "BB kiểm tra chạy thử", "QT09", "ww", "", "Đầu việc Chạy thử + file", ""], ["13", "BB nghiệm thu đưa vào sử dụng", "QT09, QT01", "ww", "", "Mốc Nghiệm thu + file", "Ngày nghiệm thu là mốc tính hạn bảo hành"], ["14", "BB bàn giao công việc", "QT03", "wf", "", "Bước Bàn giao công việc – WF Nghỉ việc", "Dùng cả khi nghỉ thai sản, điều chuyển"], ["14", "BB chuyển giao công nghệ", "QT09", "ww", "", "Đầu việc CGCN + file", "Trùng số với phiếu bàn giao công việc"], ["15", "Phiếu bảo hành", "QT10", "wf", "", "Dữ liệu tra hạn – WF Bảo hành", "Phát hành tại mốc nghiệm thu"], ["16", "BB nhận thiết bị bảo hành", "QT10", "wf", "", "Bước Nhận thiết bị – WF Bảo hành", "Tình trạng trước BH, hạn hoàn trả"], ["17", "BB bàn giao sau bảo hành / bảo trì", "QT10", "wf", "", "Bước Bàn giao lại – WF Bảo hành", "Dùng chung cho bảo trì định kỳ"], ["18", "Thuyết minh kỹ thuật", "QT07", "wf", "", "File đính kèm bước PAKT – WF Đấu thầu", ""], ["19", "Thông báo huấn luyện", "QT09", "of", "", "Công văn đi", ""], ["20", "Kế hoạch huấn luyện", "QT09", "ww", "", "Đầu việc Huấn luyện + file", ""], ["21", "BB nghiệm thu kết quả huấn luyện", "QT09", "ww", "", "Đầu việc Huấn luyện + file", ""], ["22", "Kế hoạch triển khai dự án", "QT01", "ww", "", "Khung dự án mẫu (kế hoạch / thực tế)", "Thay thế file Excel"], ["23", "Phiếu tổng hợp yêu cầu thiết bị", "QT07, QT09, QT10", "rq", "", "Form “Yêu cầu nội bộ” loại Thiết bị", "Loại BH / sửa chữa → WF Bảo hành"], ["24", "Bảng chào giá thiết bị", "QT01", "wf", "", "Bước Báo giá CĐT + file – WF Đấu thầu", ""], ["25", "Tiến độ cung cấp hàng hóa đầu vào", "QT06", "wf", "", "Báo cáo WF Mua hàng lọc theo dự án", "Không cần file riêng"], ["26", "Tổng hợp yêu cầu lắp đặt", "QT09", "ww", "", "Đầu việc Khảo sát mặt bằng + checklist 8 hạng mục", ""], ["27", "Sổ theo dõi – đánh giá NCC", "QT06", "wf", "", "Trường đánh giá NCC ở bước cuối WF Mua hàng", "Cần khách chốt tiêu chí"], ["28", "Công văn giải trình", "QT08, QT09", "of", "", "Công văn đi", ""], ["29", "Công văn gia hạn hợp đồng", "QT01", "of", "", "Công văn đi", ""], ["30", "Đề nghị tạm ứng CĐT", "QT01, QT05", "of", "", "Công văn đi", "Gắn Mã dự án"], ["31", "Đề nghị xuất hàng", "QT04", "wf", "", "Bước khởi tạo WF Xuất kho", "Xuất bán / dự án / bảo hành"], ["32", "Đề nghị thanh toán CĐT", "QT01, QT05", "of", "", "Công văn đi", "Theo từng đợt nghiệm thu"], ["33", "Phiếu đề nghị xuất hóa đơn", "QT05 7.1", "rq", "", "Form Request", ""], ["34", "Giấy đi đường", "QT05", "rq", "", "Form “Thanh toán công tác phí”", "2 bản 2025/2026 trùng nội dung"], ["35", "Đơn xin nghỉ phép", "Ngoài QT", "hr", "Base Timeoff", "Đơn nghỉ", ""], ["36", "Giấy giới thiệu", "QT01", "of", "", "Công văn đi (số GGT)", "Liên kết Giấy đi đường 34"], ["37", "Đăng ký làm thêm giờ", "Ngoài QT", "hr", "Base Timeoff", "Đơn làm thêm giờ", "Đẩy sang Base Payroll"], ["38", "Sổ giao nhận tài liệu", "QT02, QT06", "of", "", "Sổ giao nhận văn bản", ""], ["39", "Phiếu giao việc", "Ngoài QT", "ww", "", "Giao việc", ""], ["40", "Phiếu giao mục tiêu", "Ngoài QT", "na", "", "Giữ Excel giai đoạn 1", "KPI"], ["41", "Phiếu đánh giá hiệu quả công việc", "Ngoài QT", "na", "", "Giữ Excel giai đoạn 1", "KPI"], ["42", "Phiếu yêu cầu tuyển dụng", "QT03", "rq", "", "Form Request", "Duyệt xong kích hoạt WF Tuyển dụng"], ["43", "Báo cáo kết quả thử việc", "QT03", "rq", "", "Form Request, duyệt 4 cấp", "Kết quả cập nhật Base HRM"], ["44", "Bảng điểm KPI theo quý", "Ngoài QT", "na", "", "Giữ Excel giai đoạn 1", "Xếp loại → khoản thưởng Base Payroll"], ["45", "BB bàn giao tài sản cho nhân viên", "QT03", "hr", "Base Onboard", "Checklist cấp phát tài sản", "Chiều thu hồi ở WF Nghỉ việc"], ["46", "Tem phụ", "QT08", "no", "", "Nhãn in dán hàng", ""], ["47", "Thư trả lời phỏng vấn", "QT03", "wf", "", "Bước Kết luận “Trả hồ sơ” – WF Tuyển dụng", ""], ["48", "Thông báo trúng tuyển", "QT03", "hr", "Base Onboard", "Thư mời nhận việc", ""], ["49", "Giấy biên nhận tiền", "QT05", "rq", "", "File đính kèm Request thanh toán", "Chi không có hóa đơn"], ["50", "Gáy file còng", "QT02", "no", "", "Nhãn lưu trữ giấy", ""], ["51", "Đăng ký sử dụng thẻ chấm công", "Ngoài QT", "hr", "Base Schedule", "Thiết lập chấm công khi nhận việc", ""], ["52", "Thư mời phỏng vấn", "QT03", "wf", "", "Bước Mời phỏng vấn – WF Tuyển dụng", ""], ["53", "Đánh giá sau phỏng vấn", "QT03", "wf", "", "Bước Phỏng vấn vòng 1–2 – WF Tuyển dụng", "Chấm điểm 5 nhóm tiêu chí"], ["54", "Đơn giải trình", "Ngoài QT", "hr", "Base Timeoff", "Đơn giải trình công", "Đi muộn / về sớm theo bảng công"], ["55", "Đơn nghỉ thai sản", "Ngoài QT", "hr", "Base Timeoff", "Loại nghỉ thai sản", "Cập nhật trạng thái trên Base HRM"]], "calendar": [{"wk": "Tuần 1 · 09/11 – 15/11", "goal": "Chốt phạm vi, tự thiết lập Work+", "days": [{"dow": "T2", "dm": "09/11", "cls": "ses", "label": "Buổi 1 · Chốt phạm vi", "today": true}, {"dow": "T3", "dm": "10/11", "cls": "try", "label": "Tự thiết lập Work+", "today": false}, {"dow": "T4", "dm": "11/11", "cls": "try", "label": "Tự thiết lập Work+", "today": false}, {"dow": "T5", "dm": "12/11", "cls": "ses", "label": "Buổi 2 · Review Work+", "today": false}, {"dow": "T6", "dm": "13/11", "cls": "try", "label": "Dùng thử, chỉnh theo review", "today": false}, {"dow": "T7", "dm": "14/11", "cls": "", "label": "", "today": false}, {"dow": "CN", "dm": "15/11", "cls": "", "label": "", "today": false}]}, {"wk": "Tuần 2 · 16/11 – 22/11", "goal": "Review Work+, hồ sơ nhân sự, phân ca công, chốt công, bảng lương", "days": [{"dow": "T2", "dm": "16/11", "cls": "try", "label": "Dùng thử Work+", "today": false}, {"dow": "T3", "dm": "17/11", "cls": "ses", "label": "Buổi 3 · Hồ sơ NS, phân ca", "today": false}, {"dow": "T4", "dm": "18/11", "cls": "try", "label": "Nhập hồ sơ nhân sự", "today": false}, {"dow": "T5", "dm": "19/11", "cls": "try", "label": "Nhập ca, công", "today": false}, {"dow": "T6", "dm": "20/11", "cls": "ses", "label": "Buổi 4 · Chốt công, lương", "today": false}, {"dow": "T7", "dm": "21/11", "cls": "", "label": "", "today": false}, {"dow": "CN", "dm": "22/11", "cls": "", "label": "", "today": false}]}, {"wk": "Tuần 3 · 23/11 – 29/11", "goal": "Đào tạo toàn bộ nhân sự, vận hành", "days": [{"dow": "T2", "dm": "23/11", "cls": "try", "label": "Chạy thử bảng công, lương", "today": false}, {"dow": "T3", "dm": "24/11", "cls": "ses", "label": "Buổi 5 · Đào tạo nhân sự", "today": false}, {"dow": "T4", "dm": "25/11", "cls": "run", "label": "Vận hành chính thức", "today": false}, {"dow": "T5", "dm": "26/11", "cls": "run", "label": "Vận hành", "today": false}, {"dow": "T6", "dm": "27/11", "cls": "run", "label": "Vận hành", "today": false}, {"dow": "T7", "dm": "28/11", "cls": "", "label": "", "today": false}, {"dow": "CN", "dm": "29/11", "cls": "", "label": "", "today": false}]}]};
+const $ = (s) => document.querySelector(s);
+const R = '&nbsp;<i class="rc" title="Việc lặp lại">↻</i>';
+
+$('#clogo').innerHTML = D.client.logo_data_uri ? `<img src="${D.client.logo_data_uri}" alt="${D.client.unit}">` : D.client.short;
+$('#ttl').innerHTML = `<b>Triển khai ${D.product}</b> · ${D.client.unit}`;
+$('#eyebrow').textContent = D.client.legal_name;
+$('#h1').innerHTML = `Triển khai ${D.product}<br>${D.client.unit}`;
+$('#lead').textContent = D.hero_lead;
+$('#kpis').innerHTML = D.kpis.map(k => `<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join('');
+$('#goals').innerHTML = D.goals.map(g => `<div class="goal"><span class="gi" aria-hidden="true">${g.icon}</span><h4>${g.title}</h4><p>${g.text}</p></div>`).join('');
+$('#legend').innerHTML = D.solution.apps.map(a => `<span><i class="lg ${a.kind}"></i>${a.name}</span>`).join('') + '<span><b>↻</b> việc tự lặp lại</span>';
+$('#before').innerHTML = D.objective.before.map(x => `<li>${x}</li>`).join('');
+$('#after').innerHTML = D.objective.after.map(x => `<li>${x}</li>`).join('');
+$('#foot').textContent = D.footer;
+
+// ---- solution org chart: app → group (Team/Project/Nhóm phân loại) → list → items ----
+const item = (i) => typeof i === 'string' ? i : (i.t + (i.r ? R : ''));
+const card = (l, k) => l.flow
+  ? `<div class="tl po"><em class="ty">Nhóm đề xuất</em><h5>${l.name}</h5><ol class="steps">${l.flow.map(s => `<li>${s}</li>`).join('')}</ol></div>`
+  : `<div class="tl ${k}"><h5>${l.name}</h5><ul>${l.items.map(i => `<li>${item(i)}</li>`).join('')}</ul></div>`;
+const node = (cls, k, ty, t, s) => `<div class="oc-n ${cls} ${k || ''}">${ty ? `<em class="ty">${ty}</em>` : ''}<b>${t}</b>${s ? `<span>${s}</span>` : ''}</div>`;
+const groupLi = (g, k) => `<li class="oc-i">${node('mm-l2', k, g.type, g.name, g.manager ? 'Quản lý: ' + g.manager : '')}<div class="oc-stack ${k}">${g.lists.map(l => card(l, k)).join('')}</div></li>`;
+const appLi = (a) => `<li class="oc-i">${node('mm-l1', a.kind, '', a.name, a.sub)}<ul class="oc-u ${a.kind}">${a.groups.map(g => groupLi(g, a.kind)).join('')}</ul></li>`;
+$('#mm').innerHTML = D.solution.apps.map(a => `<div class="appblk"><div class="oc"><ul class="oc-u">${appLi(a)}</ul></div></div>`).join('');
+
+function equalize() { document.querySelectorAll('#mm .appblk').forEach(eq); }
+function eq(mm) {
+    mm.querySelectorAll('.oc-n.mm-l1, .oc-n.mm-l2, .tl').forEach(e => { e.style.minHeight = ''; });
+  if (window.innerWidth <= 980 || mm.offsetParent === null) return;
+  const same = (els) => { if (!els.length) return; const m = Math.max(...els.map(e => e.getBoundingClientRect().height)); els.forEach(e => { e.style.minHeight = m + 'px'; }); };
+  same([...mm.querySelectorAll('.oc-n.mm-l1')]);
+  same([...mm.querySelectorAll('.oc-n.mm-l2')]);
+  const stacks = [...mm.querySelectorAll('.oc-stack')];
+  const rows = Math.max(...stacks.map(s => s.children.length));
+  for (let i = 0; i < rows; i++) same(stacks.map(s => s.children[i]).filter(Boolean));
+}
+window.addEventListener('resize', equalize);
+if (document.fonts) document.fonts.ready.then(equalize);
+
+// ---- roadmap ----
+$('#cal').innerHTML = D.calendar.map(w => `
+ <div class="calw">
+  <div class="calh"><b>${w.wk}</b><span class="calg">Mục tiêu: ${w.goal}</span></div>
+  <div class="calg7">${w.days.map(d => `<div class="cd ${d.cls} ${d.today ? 'today' : ''}"><div class="cdh"><span>${d.dow}</span><b>${d.dm}</b></div>${d.label ? `<p>${d.label}</p>` : ''}${d.today ? '<em>Hôm nay</em>' : ''}</div>`).join('')}</div>
+ </div>`).join('');
+$('#sess').innerHTML = D.sessions.map((s, i) => `
+ <div class="stage">
+  <header><span class="jn">${i + 1}</span><div><h4>Buổi ${i + 1} · ${s.title}</h4><div class="app">${s.when}</div></div></header>
+  <div class="row"><div class="rl">Thành phần</div>${s.who}</div>
+  <div class="row"><div class="rl">Nội dung</div><ul>${s.content.map(x => `<li>${x}</li>`).join('')}</ul></div>
+  <div class="row"><div class="rl">Kết quả sau buổi</div><p class="keep">${s.result}</p></div>
+ </div>`).join('');
+
+// ---- tabs, theme ----
+const TABS = ['nghiep-vu', 'danh-muc', 'lo-trinh'];
+function show(id, push) {
+  if (!TABS.includes(id)) id = 'nghiep-vu';
+  TABS.forEach(t => {
+    const on = t === id;
+    document.getElementById(t).hidden = !on;
+    const b = document.getElementById('t-' + t);
+    b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  if (id === 'nghiep-vu') requestAnimationFrame(equalize);
+  if (push && location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+}
+document.querySelectorAll('.maintabs .stab').forEach(b => b.addEventListener('click', () => { show(b.dataset.tab, true); window.scrollTo({ top: document.querySelector('.maintabs').offsetTop - 70, behavior: 'smooth' }); }));
+window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+show(location.hash.slice(1) || 'nghiep-vu');
+const root = document.documentElement;
+try { const t = localStorage.getItem('sd-theme'); if (t) root.dataset.theme = t; } catch (e) {}
+$('#themeb').addEventListener('click', () => {
+  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme = dark ? 'light' : 'dark';
+  try { localStorage.setItem('sd-theme', root.dataset.theme); } catch (e) {}
+});
+
+// ---- danh mục số hóa ----
+const APPS = {wf:'Base Workflow', ww:'Base WeWork', rq:'Base Request', of:'Base Office', hr:'Bộ HRM', na:'Ngoài phạm vi', no:'Không số hóa'};
+const ORDER = ['wf','ww','rq','of','hr','na','no'];
+const atag = (k, label) => `<span class="atag a-${k}">${label || APPS[k]}</span>`;
+const cnt = {}; D.F.forEach(f => cnt[f[3]] = (cnt[f[3]] || 0) + 1);
+const CV = {wf:'--app', ww:'--ev', rq:'--po', of:'--cyan', hr:'--core', na:'--fd', no:'--muted'};
+$('#stats').innerHTML = ORDER.map(k => `<div class="stat" style="--c:var(${CV[k]})"><b>${cnt[k] || 0}</b><span>${APPS[k]}</span></div>`).join('');
+$('#qtBody').innerHTML = D.QT.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1].map(a => atag(a[0])).join('')}</td><td>${r[2]}</td></tr>`).join('');
+let cur = 'all';
+const chips = $('#chips');
+chips.innerHTML = `<button class="chip" aria-pressed="true" data-k="all">Tất cả (${D.F.length})</button>` + ORDER.map(k => `<button class="chip" aria-pressed="false" data-k="${k}" style="--c:var(${CV[k]})">${APPS[k]} (${cnt[k] || 0})</button>`).join('');
+const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
+function renderCat() {
+  const t = norm($('#fq').value.trim());
+  const rows = D.F.filter(f => (cur === 'all' || f[3] === cur) && (!t || norm(f.join(' ')).includes(t)));
+  $('#catBody').innerHTML = rows.map(f => `<tr><td class="code">${f[0]}</td><td><b>${f[1]}</b></td><td class="mut">${f[2]}</td><td>${atag(f[3], f[4] || null)}</td><td>${f[5]}</td><td class="mut">${f[6]}</td></tr>`).join('') || '<tr><td colspan="6" class="mut">Không có biểu mẫu khớp. Thử bỏ bộ lọc hoặc đổi từ khóa.</td></tr>';
+  $('#count').textContent = `Đang hiển thị ${rows.length} / ${D.F.length} biểu mẫu`;
+}
+chips.addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; cur = b.dataset.k; chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b ? 'true' : 'false')); renderCat(); });
+$('#fq').addEventListener('input', renderCat);
+renderCat();
+</script>
+</body>
+</html>
+
+</body></html>
